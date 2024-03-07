@@ -16,7 +16,7 @@ class velociraptor:
     def __init__(self, root):
         self.root = root
         self.root.title('Velociraptor')
-        self.root.geometry("800x400")
+        self.root.geometry("1100x400")
         self.root.configure(bg='#414141')
 
         style = ttk.Style()        
@@ -30,7 +30,7 @@ class velociraptor:
         self.lat1 = ttk.Frame(self.root, width=200, style='barratop.TFrame')
         self.lat1.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=4)
 
-        self.lat2 = ttk.Frame(self.root, width=300, style='barratop.TFrame')
+        self.lat2 = ttk.Frame(self.root, width=200, style='barratop.TFrame')
         self.lat2.grid(row=0, column=3, sticky='ns', pady=0, padx=0, rowspan=4)
 
         self.control = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
@@ -42,8 +42,8 @@ class velociraptor:
         #self.logof = ttk.LabelFrame(self.root, text='Empresa', padding=(10, 10))
         self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
-        self.msj = ttk.Frame(self.root, width=800, style='modulo.TFrame')
-        #self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
+        self.msj = ttk.Frame(self.root, style='barratop.TFrame')
+        self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
         self.msj.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2)
 
         self.tk_logo_image = None
@@ -63,7 +63,7 @@ class velociraptor:
     def create_labels_and_entries(self):
         # Cargar y redimensionar la imagen
         logo_image_path = 'logo.png'
-        self.tk_logo_image = self.resize_image(logo_image_path, 100, 100)
+        self.tk_logo_image = self.resize_image(logo_image_path, 200, 200)
         # Mostrar la imagen en un Label
         self.logolabel = ttk.Label(self.logof, image=self.tk_logo_image, padding=0)
         self.logolabel.grid(row=0, column=0, padx=10, pady=10)
