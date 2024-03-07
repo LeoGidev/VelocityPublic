@@ -16,7 +16,7 @@ class velociraptor:
     def __init__(self, root):
         self.root = root
         self.root.title('Velociraptor')
-        self.root.geometry("1100x400")
+        self.root.geometry("800x400")
         self.root.configure(bg='#414141')
 
         style = ttk.Style()        
@@ -27,7 +27,7 @@ class velociraptor:
         self.nav_bar = ttk.Frame(self.root, height=50, style='barratop.TFrame')
         self.nav_bar.grid(row=0, column=0, sticky='ew', pady=0, padx=0, columnspan=4)
 
-        self.lat1 = ttk.Frame(self.root, width=300, style='barratop.TFrame')
+        self.lat1 = ttk.Frame(self.root, width=200, style='barratop.TFrame')
         self.lat1.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=4)
 
         self.lat2 = ttk.Frame(self.root, width=300, style='barratop.TFrame')
@@ -40,10 +40,10 @@ class velociraptor:
         
         self.logof = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
         #self.logof = ttk.LabelFrame(self.root, text='Empresa', padding=(10, 10))
-        self.logof.grid(row=2, column=2, sticky='ew', padx=10, pady=3)
+        self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
-        self.msj = ttk.Frame(self.root, width=800, style='barratop.TFrame')
-        self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
+        self.msj = ttk.Frame(self.root, width=800, style='modulo.TFrame')
+        #self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
         self.msj.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2)
 
         self.tk_logo_image = None
