@@ -10,6 +10,8 @@ from tkinter import ttk
 import os
 from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
+import threading
+import time
 
 
 class velociraptor:
@@ -87,7 +89,8 @@ class velociraptor:
 
     def test(self):
         
-    
+        # Desactivar el botón durante la tarea
+        self.btn['state'] = 'disabled'
         
         st = speedtest.Speedtest()
         st.get_best_server()
@@ -103,6 +106,20 @@ class velociraptor:
         compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
         #telegram#
         self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
+
+    def iniciar_tarea(self):
+        # Desactivar el botón durante la tarea
+        self.btn['state'] = 'disabled'
+        # Crear y mostrar la barra de progreso
+        self.progreso = ttk.Progressbar(self.control, mode='indeterminate')
+        self.progreso.grid(row=2, column=0, sticky='ew')
+        # Iniciar la tarea en un hilo separado
+        hilo = threading.Thread(target=self.test)
+        hilo.start()
+
+    def actualizar_barra_progreso(self, valor):
+        self.progreso['value'] = valor
+        self.progreso.update_idletasks()
         
     
 
