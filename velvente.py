@@ -46,9 +46,7 @@ class velociraptor:
         self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
         self.msj.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2)
 
-        #barra de progreso
-        self.barra_progreso = ttk.Progressbar(self.root, length=300, mode='indeterminate')
-        self.barra_progreso.grid(row=5, column=1, columnspan=2, pady=10)
+       
 
         self.tk_logo_image = None
         self.tk_start_image = None
