@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
-import threading
+#import threading
 import time
 import imageio
 from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
@@ -12,7 +12,7 @@ class velociraptor:
     def __init__(self, root):
         self.root = root
         self.root.title('Velociraptor')
-        self.root.geometry("1100x400")
+        self.root.geometry("1100x800")
         self.root.configure(bg='#414141')
 
         style = ttk.Style()        
@@ -62,52 +62,41 @@ class velociraptor:
         self.resultmsj.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
         #dibujo
         self.gif_canvas = Canvas(self.msj, bg='#414141', width=250, height=250)
-        self.gif_canvas.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+        self.gif_canvas.grid(row=0, column=2, padx=10, pady=10)
 
     def create_buttons(self):
         # Cargar y redimensionar la imagen del botón
         start_image_path = 'inicio.png'
         self.tk_start_image = self.resize_image(start_image_path, 150, 150)
         # Crear un botón con la imagen
-        self.btn = ttk.Button(self.control, image=self.tk_start_image, command=self.iniciar_tarea)
+        self.btn = ttk.Button(self.control, image=self.tk_start_image, command=self.test)
         self.btn.grid(row=1, column=0, sticky='ew')
         # Botón de salir
         self.exit_b = ttk.Button(self.lat2, text='Salir', command=self.salir)
         self.exit_b.grid(row=0, column=0, sticky='we')
     
    
-    def iniciar_tarea(self):
-        # Desactivar el botón durante la tarea
-        self.btn['state'] = 'disabled'
-        # Crear y mostrar la barra de progreso
-        self.progreso = ttk.Progressbar(self.control, mode='indeterminate')
-        self.progreso.grid(row=2, column=0, sticky='ew')
-        # Iniciar la tarea en un hilo separado
-        hilo = threading.Thread(target=self.test)
-        hilo.start()
+    
 
-    def actualizar_barra_progreso(self, valor):
-        self.progreso['value'] = valor
-        self.progreso.update_idletasks()
+    def actualizarcanva(self, valor):
+        print("hola")
 
     def test(self):
+        self.load_and_display_gif()
         st = speedtest.Speedtest()
-        st.get_best_server()       
-
-        # Operaciones de prueba de velocidad
-        d_st = st.download() / 1000000
-        dwnT = round(d_st, 2)
-        u_st = st.upload() / 1000000
-        upldT = round(u_st, 2)
+        st.get_best_server()
+        d_st = st.download()/1000000
+        dwnT = round(d_st,2)
+        u_st = st.upload()/1000000
+        upldT = round(u_st,2)
+        print("tu velocidad es", dwnT, "Mbs")
+        print("tu subida es", upldT, "Mbs")
         st.get_servers([])
         ping = st.results.ping
-
-        # Actualizar la barra de progreso desde el hilo principal
-       
-
-        # Configurar el mensaje con los resultados de la prueba
-        compDwn = f'descarga: {dwnT} mbs \n subida: {upldT} mbs \n ping: {ping}'
-        self.resultmsj.config(text=f'Resultado de la prueba = {compDwn}')
+        print("tu ping es de", ping)
+        compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
+        #telegram#
+        self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
 
     def load_and_display_gif(self):
         # Ruta al archivo GIF
