@@ -5,6 +5,7 @@ from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
 import threading
 import time
+import imageio
 
 class velociraptor:
     def __init__(self, root):
@@ -87,29 +88,54 @@ class velociraptor:
 
     def test(self):
         st = speedtest.Speedtest()
-        st.get_best_server()
-        total_steps = 100
+        st.get_best_server()       
 
-        for step in range(1, total_steps + 1):
-            #time.sleep(0.1)  # Simulación de una operación de larga duración
+        # Operaciones de prueba de velocidad
+        d_st = st.download() / 1000000
+        dwnT = round(d_st, 2)
+        u_st = st.upload() / 1000000
+        upldT = round(u_st, 2)
+        st.get_servers([])
+        ping = st.results.ping
 
-            # Operaciones de prueba de velocidad
-            d_st = st.download() / 1000000
-            dwnT = round(d_st, 2)
-            u_st = st.upload() / 1000000
-            upldT = round(u_st, 2)
-            st.get_servers([])
-            ping = st.results.ping
-
-            # Actualizar la barra de progreso desde el hilo principal
-            self.root.after(0, self.actualizar_barra_progreso, step)
-
-        # Restablecer la barra de progreso después de completar la tarea
-        self.actualizar_barra_progreso(0)
+        # Actualizar la barra de progreso desde el hilo principal
+       
 
         # Configurar el mensaje con los resultados de la prueba
         compDwn = f'descarga: {dwnT} mbs \n subida: {upldT} mbs \n ping: {ping}'
         self.resultmsj.config(text=f'Resultado de la prueba = {compDwn}')
+
+    def load_and_display_gif(self):
+        # Ruta al archivo GIF
+        gif_path = "load.gif"
+
+        # Carga el GIF como una secuencia de imágenes
+        gif_frames = imageio.get_reader(gif_path)
+
+        # Obtiene el tamaño del Canvas
+        canvas_width = self.gif_canvas.winfo_reqwidth()
+        canvas_height = self.gif_canvas.winfo_reqheight()
+
+        # Recorre todas las imágenes y las muestra en el Canvas
+        for i, frame in enumerate(gif_frames):
+            # Convierte el array de píxeles a una imagen de PIL
+            image = Image.fromarray(frame)
+            image = image.resize((150, 150))  # Ajusta el tamaño según tus necesidades
+
+            # Convierte la imagen a un formato compatible con Tkinter
+            tk_image = ImageTk.PhotoImage(image)
+
+            # Configura la imagen en el Canvas
+            canvas_x = (canvas_width - tk_image.width()) // 2  # Centra horizontalmente
+            canvas_y = (canvas_height - tk_image.height()) // 2  # Centra verticalmente
+            self.gif_canvas.create_image(canvas_x, canvas_y, anchor=tk.NW, image=tk_image)
+            self.gif_canvas.image = tk_image
+
+            # Actualiza la interfaz gráfica para mostrar el siguiente frame
+            self.root.update_idletasks()
+
+            # Espera un breve periodo para lograr la animación
+            self.root.after(100)  
 
 
     def create_widgets(self):
