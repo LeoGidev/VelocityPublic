@@ -3,8 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
-from concurrent.futures import ThreadPoolExecutor
-import time
 import imageio
 from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
 
@@ -84,39 +82,40 @@ class velociraptor:
         print("hola")
 
     def test(self):
-        # Iniciar el hilo de imagenLoad
-        self.loading_event.clear()  # Restablecer el evento
-        loading_thread = threading.Thread(target=self.imagenLoad)
-        loading_thread.start()
+        with ThreadPoolExecutor() as executor:
+            future = executor.submit(self.imagenLoad)
 
-        st = speedtest.Speedtest()
-        st.get_best_server()
-        d_st = st.download()/1000000
-        dwnT = round(d_st,2)
-        u_st = st.upload()/1000000
-        upldT = round(u_st,2)
-        print("tu velocidad es", dwnT, "Mbs")
-        print("tu subida es", upldT, "Mbs")
-        st.get_servers([])
-        ping = st.results.ping
-        print("tu ping es de", ping)
-        self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
-        #telegram#
-        #self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
+            st = speedtest.Speedtest()
+            st.get_best_server()
+            d_st = st.download()/1000000
+            dwnT = round(d_st,2)
+            u_st = st.upload()/1000000
+            upldT = round(u_st,2)
+            print("tu velocidad es", dwnT, "Mbs")
+            print("tu subida es", upldT, "Mbs")
+            st.get_servers([])
+            ping = st.results.ping
+            print("tu ping es de", ping)
+            self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
+            #telegram#
+            #self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
 
-        # Establecer el evento para iniciar la imagenDone después de un breve periodo
-        self.root.after(1000, self.loading_event.set)
+            # Esperar a que la tarea de imagenLoad termine
+            self.root.after(100, self.check_thread, future)
     
-    def start_imagenDone(self):
-        # Detener el hilo de imagenLoad y comenzar el hilo de imagenDone
-        self.loading_thread.join()  # Espera a que termine el hilo de imagenLoad
-        self.test_thread = threading.Thread(target=self.imagenDone)
-        self.test_thread.start()
+   
+    def check_thread(self, future):
+        if future.done():
+            # Llamar a la función imagenDone después de la prueba de velocidad
+            self.imagenDone()
+        else:
+            # Verificar el estado del hilo después de un breve período
+            self.root.after(100, self.check_thread, future)
 
     def imagenLoad(self):
-       self.resultmsj.config(text=f'Realizando prueba')
-       print("lading...")
-       self.loading_event.wait()
+        self.resultmsj.config(text=f'Realizando prueba')
+        print("lading...")
+       
         
     def imagenDone(self):
         self.resultmsj.config(text=f'Resultado de la prueba = {self.compDwn}')
