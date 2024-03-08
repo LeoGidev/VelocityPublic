@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import imageio
 from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
 import threading
+import os
 
 class velociraptor:
     def __init__(self, root):
@@ -18,6 +19,8 @@ class velociraptor:
         self.root.columnconfigure(2, weight=0)
         self.root.columnconfigure(3, weight=2)
         #self.root.rowconfigure(0, weight=1)
+        #Configuración del icono
+        self.root.iconbitmap(os.path.abspath("ico.ico"))
 
         style = ttk.Style()        
         self.root.set_theme('equilux')  
