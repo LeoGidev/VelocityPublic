@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import threading
 import time
 import imageio
+from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
 
 class velociraptor:
     def __init__(self, root):
@@ -59,6 +60,9 @@ class velociraptor:
         # Configurar mensaje
         self.resultmsj = ttk.Label(self.msj, text='Nada aún por aquí', background='#414141', foreground='white')
         self.resultmsj.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
+        #dibujo
+        self.gif_canvas = Canvas(self.msj, bg='#414141', width=250, height=250)
+        self.gif_canvas.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
 
     def create_buttons(self):
         # Cargar y redimensionar la imagen del botón
