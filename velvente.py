@@ -91,7 +91,7 @@ class velociraptor:
         total_steps = 100
 
         for step in range(1, total_steps + 1):
-            time.sleep(0.1)  # Simulación de una operación de larga duración
+            #time.sleep(0.1)  # Simulación de una operación de larga duración
 
             # Operaciones de prueba de velocidad
             d_st = st.download() / 1000000
