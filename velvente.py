@@ -13,6 +13,9 @@ class velociraptor:
         self.root.title('Velociraptor')
         self.root.geometry("1100x800")
         self.root.configure(bg='#414141')
+        self.root.columnconfigure(0, weight=1)
+        self.root.columnconfigure(3, weight=1)
+        #self.root.rowconfigure(0, weight=1)
 
         style = ttk.Style()        
         self.root.set_theme('equilux')  
@@ -35,25 +38,33 @@ class velociraptor:
         self.logof = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
         self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
+        self.root.columnconfigure(0, weight=1)
+
         self.casilla = ttk.Frame(self.root, style='barratop.TFrame')
         self.casilla = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
         self.casilla.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2) 
         #Frames de resultado
+        self.minilat1 = ttk.Frame(self.casilla, width=50, style='barratop.TFrame')
+        self.minilat1.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=3)
+
         self.msj = ttk.Frame(self.casilla, style='barratop.TFrame')
         self.msj = ttk.LabelFrame(self.casilla, text='Mensajes:', padding=(10, 10))
-        self.msj.grid(row=0, column=0, sticky='ew', padx=0, pady=3, columnspan=3) 
+        self.msj.grid(row=0, column=1, sticky='ew', padx=0, pady=3, columnspan=3) 
 
         self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
         self.bajada = ttk.LabelFrame(self.casilla, text='Bajada:', padding=(10, 10))
-        self.bajada.grid(row=1, column=0, sticky='ew', pady=3) 
+        self.bajada.grid(row=1, column=1, sticky='nsew', pady=3) 
 
         self.subida = ttk.Frame(self.casilla, style='modulo.TFrame')
         self.subida = ttk.LabelFrame(self.casilla, text='Subida:', padding=(10, 10))
-        self.subida.grid(row=1, column=1, sticky='ew', padx=0, pady=3)
+        self.subida.grid(row=1, column=2, sticky='nsew', padx=0, pady=3)
 
         self.ping = ttk.Frame(self.casilla, style='modulo.TFrame')
         self.ping = ttk.LabelFrame(self.casilla, text='Subida:', padding=(10, 10))
-        self.ping.grid(row=1, column=2, sticky='ew', padx=0, pady=3)  
+        self.ping.grid(row=1, column=3, sticky='nsew', padx=0, pady=3) 
+
+        self.minilat2 = ttk.Frame(self.casilla, width=50, style='barratop.TFrame')
+        self.minilat2.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=3) 
 
         self.tk_logo_image = None
         self.tk_start_image = None
@@ -75,16 +86,16 @@ class velociraptor:
         self.logolabel = ttk.Label(self.logof, image=self.tk_logo_image, padding=0)
         self.logolabel.grid(row=0, column=0, padx=10, pady=10)
         # Configurar mensaje
-        self.resultmsj = ttk.Label(self.msj, text='Nada aún por aquí', background='#414141', foreground='white')
-        self.resultmsj.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
+        self.resultmsj = ttk.Label(self.msj, text='Sin Dato', background='#414141', foreground='white')
+        self.resultmsj.grid(row=0, column=0, sticky='e', padx=0, pady=10)
         # subida
-        self.sub = ttk.Label(self.subida, text='Nada aún por aquí', background='#414141', foreground='white')
+        self.sub = ttk.Label(self.subida, text='Sin Dato', background='#414141', foreground='white')
         self.sub.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
         #bajda
-        self.baj = ttk.Label(self.bajada, text='Nada aún por aquí', background='#414141', foreground='white')
+        self.baj = ttk.Label(self.bajada, text='Sin Dato', background='#414141', foreground='white')
         self.baj.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
         #ping
-        self.pi = ttk.Label(self.ping, text='Nada aún por aquí', background='#414141', foreground='white')
+        self.pi = ttk.Label(self.ping, text='Sin Dato', background='#414141', foreground='white')
         self.pi.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
         
         
@@ -104,7 +115,7 @@ class velociraptor:
     
 
     def starting(self):
-        self.resultmsj.config(text=f'Realizando prueba. Por favor Aguarde')
+        self.resultmsj.config(text=f'Realizando prueba... Por favor Aguarde...')
         self.btn['state'] = 'disable'
         print("lading...")
         # Iniciar hilo para la tarea
@@ -115,21 +126,24 @@ class velociraptor:
         st = speedtest.Speedtest()
         st.get_best_server()
         d_st = st.download()/1000000
-        dwnT = round(d_st,2)
+        self.dwnT = round(d_st,2)
         u_st = st.upload()/1000000
-        upldT = round(u_st,2)
-        print("tu velocidad es", dwnT, "Mbs")
-        print("tu subida es", upldT, "Mbs")
+        self.upldT = round(u_st,2)
+        print("tu velocidad es", self.dwnT, "Mbs")
+        print("tu subida es", self.upldT, "Mbs")
         st.get_servers([])
-        ping = st.results.ping
-        print("tu ping es de", ping)
-        self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
+        self.ping = st.results.ping
+        print("tu ping es de", self.ping)
+        #self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
         self.Donde()  
 
     
     def Donde(self):
-        self.resultmsj.config(text=f'Resultado de la prueba = {self.compDwn}')
+        self.resultmsj.config(text=f'Resultados de la Prueba:')
         self.btn['state'] = 'enable'
+        self.sub.config(text=f' {self.upldT} mbs')
+        self.baj.config(text=f' {self.dwnT} mbs')
+        self.pi.config(text=f' {self.ping}')
         print('listo!')
 
     def create_widgets(self):
