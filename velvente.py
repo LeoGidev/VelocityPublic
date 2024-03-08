@@ -105,7 +105,7 @@ class velociraptor:
     
     def Donde(self):
         self.resultmsj.config(text=f'Resultado de la prueba = {self.compDwn}')
-        self.btn['state'] = 'disable'
+        self.btn['state'] = 'enable'
         print('listo!')
 
     def create_widgets(self):
