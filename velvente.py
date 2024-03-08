@@ -5,6 +5,7 @@ from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
 import imageio
 from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
+import threading
 
 class velociraptor:
     def __init__(self, root):
@@ -69,7 +70,7 @@ class velociraptor:
         start_image_path = 'inicio.png'
         self.tk_start_image = self.resize_image(start_image_path, 150, 150)
         # Crear un botón con la imagen
-        self.btn = ttk.Button(self.control, image=self.tk_start_image, command=self.test)
+        self.btn = ttk.Button(self.control, image=self.tk_start_image, command=self.starting)
         self.btn.grid(row=1, column=0, sticky='ew')
         # Botón de salir
         self.exit_b = ttk.Button(self.lat2, text='Salir', command=self.salir)
@@ -78,47 +79,33 @@ class velociraptor:
    
     
 
-    def actualizarcanva(self, valor):
-        print("hola")
+    def starting(self):
+        self.resultmsj.config(text=f'Realizando prueba. Por favor Aguarde')
+        self.btn['state'] = 'disable'
+        print("lading...")
+        # Iniciar hilo para la tarea
+        self.loading_thread = threading.Thread(target=self.test)
+        self.loading_thread.start()    
 
     def test(self):
-        with ThreadPoolExecutor() as executor:
-            future = executor.submit(self.imagenLoad)
+        st = speedtest.Speedtest()
+        st.get_best_server()
+        d_st = st.download()/1000000
+        dwnT = round(d_st,2)
+        u_st = st.upload()/1000000
+        upldT = round(u_st,2)
+        print("tu velocidad es", dwnT, "Mbs")
+        print("tu subida es", upldT, "Mbs")
+        st.get_servers([])
+        ping = st.results.ping
+        print("tu ping es de", ping)
+        self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
+        self.Donde()  
 
-            st = speedtest.Speedtest()
-            st.get_best_server()
-            d_st = st.download()/1000000
-            dwnT = round(d_st,2)
-            u_st = st.upload()/1000000
-            upldT = round(u_st,2)
-            print("tu velocidad es", dwnT, "Mbs")
-            print("tu subida es", upldT, "Mbs")
-            st.get_servers([])
-            ping = st.results.ping
-            print("tu ping es de", ping)
-            self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
-            #telegram#
-            #self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
-
-            # Esperar a que la tarea de imagenLoad termine
-            self.root.after(100, self.check_thread, future)
     
-   
-    def check_thread(self, future):
-        if future.done():
-            # Llamar a la función imagenDone después de la prueba de velocidad
-            self.imagenDone()
-        else:
-            # Verificar el estado del hilo después de un breve período
-            self.root.after(100, self.check_thread, future)
-
-    def imagenLoad(self):
-        self.resultmsj.config(text=f'Realizando prueba')
-        print("lading...")
-       
-        
-    def imagenDone(self):
+    def Donde(self):
         self.resultmsj.config(text=f'Resultado de la prueba = {self.compDwn}')
+        self.btn['state'] = 'disable'
         print('listo!')
 
     def create_widgets(self):
