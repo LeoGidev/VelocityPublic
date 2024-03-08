@@ -45,11 +45,11 @@ class velociraptor:
 
         self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
         self.bajada = ttk.LabelFrame(self.casilla, text='Bajada:', padding=(10, 10))
-        self.bajada.grid(row=0, column=1, sticky='ew', padx=0, pady=3) 
+        self.bajada.grid(row=1, column=1, sticky='ew', padx=0, pady=3) 
 
-        self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
-        self.bajada = ttk.LabelFrame(self.casilla, text='Subida:', padding=(10, 10))
-        self.bajada.grid(row=0, column=2, sticky='ew', padx=0, pady=3)      
+        self.subida = ttk.Frame(self.casilla, style='modulo.TFrame')
+        self.subida = ttk.LabelFrame(self.casilla, text='Subida:', padding=(10, 10))
+        self.subida.grid(row=2, column=2, sticky='ew', padx=0, pady=3)      
 
         self.tk_logo_image = None
         self.tk_start_image = None
