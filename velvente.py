@@ -1,18 +1,10 @@
 import speedtest
-import math
-import requests
-import tkinter
-from tkinter import*
-from tkinter import ttk
-from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
 import tkinter as tk
 from tkinter import ttk
-import os
 from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
 import threading
 import time
-
 
 class velociraptor:
     def __init__(self, root):
@@ -37,27 +29,19 @@ class velociraptor:
 
         self.control = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
         self.control = ttk.LabelFrame(self.root, text='Presione el botón y aguarde', padding=(10, 10))
-        self.control.grid(row=2, column=1, sticky='ew', padx=20, pady=3)
-        
+        self.control.grid(row=2, column=1, sticky='ew', padx=20, pady=3)        
         
         self.logof = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
-        #self.logof = ttk.LabelFrame(self.root, text='Empresa', padding=(10, 10))
         self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
         self.msj = ttk.Frame(self.root, style='barratop.TFrame')
         self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
-        self.msj.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2)
-
-       
+        self.msj.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2)       
 
         self.tk_logo_image = None
         self.tk_start_image = None
         self.create_widgets()
-
-    def create_widgets(self):
-        self.create_labels_and_entries()
-        self.create_buttons()
-
+   
     def resize_image(self, image_path, width, height):
         original_image = Image.open(image_path)
         resized_image = original_image.resize((width, height), Image.LANCZOS)
@@ -80,33 +64,13 @@ class velociraptor:
         start_image_path = 'inicio.png'
         self.tk_start_image = self.resize_image(start_image_path, 150, 150)
         # Crear un botón con la imagen
-        self.btn = ttk.Button(self.control, image=self.tk_start_image, command=self.test)
+        self.btn = ttk.Button(self.control, image=self.tk_start_image, command=self.iniciar_tarea)
         self.btn.grid(row=1, column=0, sticky='ew')
         # Botón de salir
         self.exit_b = ttk.Button(self.lat2, text='Salir', command=self.salir)
         self.exit_b.grid(row=0, column=0, sticky='we')
     
-
-    def test(self):
-        
-        # Desactivar el botón durante la tarea
-        self.btn['state'] = 'disabled'
-        
-        st = speedtest.Speedtest()
-        st.get_best_server()
-        d_st = st.download()/1000000
-        dwnT = round(d_st,2)
-        u_st = st.upload()/1000000
-        upldT = round(u_st,2)
-        print("tu velocidad es", dwnT, "Mbs")
-        print("tu subida es", upldT, "Mbs")
-        st.get_servers([])
-        ping = st.results.ping
-        print("tu ping es de", ping)
-        compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
-        #telegram#
-        self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
-
+   
     def iniciar_tarea(self):
         # Desactivar el botón durante la tarea
         self.btn['state'] = 'disabled'
@@ -120,27 +84,43 @@ class velociraptor:
     def actualizar_barra_progreso(self, valor):
         self.progreso['value'] = valor
         self.progreso.update_idletasks()
+
+    def test(self):
+        st = speedtest.Speedtest()
+        st.get_best_server()
+        total_steps = 100
+
+        for step in range(1, total_steps + 1):
+            time.sleep(0.1)  # Simulación de una operación de larga duración
+
+            # Operaciones de prueba de velocidad
+            d_st = st.download() / 1000000
+            dwnT = round(d_st, 2)
+            u_st = st.upload() / 1000000
+            upldT = round(u_st, 2)
+            st.get_servers([])
+            ping = st.results.ping
+
+            # Actualizar la barra de progreso desde el hilo principal
+            self.root.after(0, self.actualizar_barra_progreso, step)
+
+        # Restablecer la barra de progreso después de completar la tarea
+        self.actualizar_barra_progreso(0)
+
+        # Configurar el mensaje con los resultados de la prueba
+        compDwn = f'descarga: {dwnT} mbs \n subida: {upldT} mbs \n ping: {ping}'
+        self.resultmsj.config(text=f'Resultado de la prueba = {compDwn}')
+
+
+    def create_widgets(self):
+        self.create_labels_and_entries()
+        self.create_buttons()
+
         
     
 
     def salir(self):
         self.root.destroy()
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
 
 
 if __name__=="__main__":
