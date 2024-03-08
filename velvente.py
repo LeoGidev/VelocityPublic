@@ -43,7 +43,7 @@ class velociraptor:
         self.logof = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
         self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
-        
+        #módulo frame de resultados
 
         self.casilla = ttk.Frame(self.root, style='barratop.TFrame')
         self.casilla = ttk.LabelFrame(self.root, text='Resultados:', padding=(10, 10))
