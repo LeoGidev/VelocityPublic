@@ -11,10 +11,12 @@ class velociraptor:
     def __init__(self, root):
         self.root = root
         self.root.title('Velociraptor')
-        self.root.geometry("1100x800")
+        self.root.geometry("900x540")
         self.root.configure(bg='#414141')
         self.root.columnconfigure(0, weight=1)
-        self.root.columnconfigure(3, weight=1)
+        self.root.columnconfigure(1, weight=0)
+        self.root.columnconfigure(2, weight=0)
+        self.root.columnconfigure(3, weight=2)
         #self.root.rowconfigure(0, weight=1)
 
         style = ttk.Style()        
@@ -25,7 +27,7 @@ class velociraptor:
         self.nav_bar = ttk.Frame(self.root, height=50, style='barratop.TFrame')
         self.nav_bar.grid(row=0, column=0, sticky='ew', pady=0, padx=0, columnspan=4)
 
-        self.lat1 = ttk.Frame(self.root, width=200, style='barratop.TFrame')
+        self.lat1 = ttk.Frame(self.root, width=100, style='barratop.TFrame')
         self.lat1.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=4)
 
         self.lat2 = ttk.Frame(self.root, width=200, style='barratop.TFrame')
@@ -41,20 +43,22 @@ class velociraptor:
         
 
         self.casilla = ttk.Frame(self.root, style='barratop.TFrame')
-        self.casilla = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
+        self.casilla = ttk.LabelFrame(self.root, text='Resultados:', padding=(10, 10))
         self.casilla.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2) 
-        self.casilla.columnconfigure(0, weight=1)
+        self.casilla.columnconfigure(0, weight=0)
         self.casilla.columnconfigure(1, weight=0)
-        self.casilla.columnconfigure(4, weight=1)
+        self.casilla.columnconfigure(4, weight=0)
+        self.casilla.rowconfigure(0, weight=1)
+
         #Frames de resultado
-        self.minilat1 = ttk.Frame(self.casilla, width=50, style='barratop.TFrame')
+        self.minilat1 = ttk.Frame(self.casilla, width=180, style='barratop.TFrame')
         self.minilat1.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=3)
 
         self.msj = ttk.Frame(self.casilla, style='barratop.TFrame')
         self.msj = ttk.LabelFrame(self.casilla, text='Mensajes:', padding=(10, 10))
         self.msj.grid(row=0, column=1, sticky='ew', padx=0, pady=3, columnspan=3) 
 
-        self.bajada = ttk.Frame(self.casilla, width=200, style='barratop.TFrame')
+        self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
         self.bajada = ttk.LabelFrame(self.casilla, text='Bajada:', padding=(10, 10))
         self.bajada.grid(row=1, column=1, sticky='nsew', pady=3) 
 
