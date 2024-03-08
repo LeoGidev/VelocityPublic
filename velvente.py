@@ -38,11 +38,14 @@ class velociraptor:
         self.logof = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
         self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
-        self.root.columnconfigure(0, weight=1)
+        
 
         self.casilla = ttk.Frame(self.root, style='barratop.TFrame')
         self.casilla = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
         self.casilla.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2) 
+        self.casilla.columnconfigure(0, weight=1)
+        self.casilla.columnconfigure(1, weight=0)
+        self.casilla.columnconfigure(4, weight=1)
         #Frames de resultado
         self.minilat1 = ttk.Frame(self.casilla, width=50, style='barratop.TFrame')
         self.minilat1.grid(row=0, column=0, sticky='ns', pady=0, padx=0, rowspan=3)
@@ -51,7 +54,7 @@ class velociraptor:
         self.msj = ttk.LabelFrame(self.casilla, text='Mensajes:', padding=(10, 10))
         self.msj.grid(row=0, column=1, sticky='ew', padx=0, pady=3, columnspan=3) 
 
-        self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
+        self.bajada = ttk.Frame(self.casilla, width=200, style='barratop.TFrame')
         self.bajada = ttk.LabelFrame(self.casilla, text='Bajada:', padding=(10, 10))
         self.bajada.grid(row=1, column=1, sticky='nsew', pady=3) 
 
