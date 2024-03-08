@@ -35,9 +35,21 @@ class velociraptor:
         self.logof = ttk.Frame(self.root, width=400, height=200, style='barratop.TFrame')
         self.logof.grid(row=2, column=2, sticky='ew', padx=100, pady=3)
 
-        self.msj = ttk.Frame(self.root, style='barratop.TFrame')
+        self.casilla = ttk.Frame(self.root, style='barratop.TFrame')
+        self.casilla = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
+        self.casilla.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2) 
+        #Frames de resultado
+        self.msj = ttk.Frame(self.casilla, style='barratop.TFrame')
         self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
-        self.msj.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2)       
+        self.msj.grid(row=0, column=0, sticky='ew', padx=0, pady=3) 
+
+        self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
+        self.bajada = ttk.LabelFrame(self.root, text='Bajada:', padding=(10, 10))
+        self.bajada.grid(row=1, column=0, sticky='ew', padx=0, pady=3) 
+
+        self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
+        self.bajada = ttk.LabelFrame(self.root, text='Subida:', padding=(10, 10))
+        self.bajada.grid(row=2, column=0, sticky='ew', padx=0, pady=3)      
 
         self.tk_logo_image = None
         self.tk_start_image = None
@@ -61,9 +73,8 @@ class velociraptor:
         # Configurar mensaje
         self.resultmsj = ttk.Label(self.msj, text='Nada aún por aquí', background='#414141', foreground='white')
         self.resultmsj.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
-        #dibujo
-        #self.gif_canvas = Canvas(self.msj, bg='#414141', width=250, height=250)
-        #self.gif_canvas.grid(row=0, column=2, padx=10, pady=10)
+        
+        
 
     def create_buttons(self):
         # Cargar y redimensionar la imagen del botón
