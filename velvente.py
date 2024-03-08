@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from PIL import Image, ImageTk
-import threading
+from concurrent.futures import ThreadPoolExecutor
 import time
 import imageio
 from tkinter import Tk, Label, Text, Button, filedialog, Frame, ttk, Scale, Canvas
@@ -43,8 +43,7 @@ class velociraptor:
         self.tk_logo_image = None
         self.tk_start_image = None
 
-        self.loading_thread = None  # Variable para almacenar el hilo de imagenLoad
-        self.test_thread = None  # Variable para almacenar el hilo de test
+        
         self.create_widgets()
    
     def resize_image(self, image_path, width, height):
@@ -64,8 +63,8 @@ class velociraptor:
         self.resultmsj = ttk.Label(self.msj, text='Nada aún por aquí', background='#414141', foreground='white')
         self.resultmsj.grid(row=0, column=0, sticky='ew', padx=10, pady=10)
         #dibujo
-        self.gif_canvas = Canvas(self.msj, bg='#414141', width=250, height=250)
-        self.gif_canvas.grid(row=0, column=2, padx=10, pady=10)
+        #self.gif_canvas = Canvas(self.msj, bg='#414141', width=250, height=250)
+        #self.gif_canvas.grid(row=0, column=2, padx=10, pady=10)
 
     def create_buttons(self):
         # Cargar y redimensionar la imagen del botón
@@ -86,8 +85,9 @@ class velociraptor:
 
     def test(self):
         # Iniciar el hilo de imagenLoad
-        self.loading_thread = threading.Thread(target=self.imagenLoad)
-        self.loading_thread.start()
+        self.loading_event.clear()  # Restablecer el evento
+        loading_thread = threading.Thread(target=self.imagenLoad)
+        loading_thread.start()
 
         st = speedtest.Speedtest()
         st.get_best_server()
@@ -100,12 +100,12 @@ class velociraptor:
         st.get_servers([])
         ping = st.results.ping
         print("tu ping es de", ping)
-        compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
+        self.compDwn= 'descarga: ' + str(dwnT) + ' mbs \n ' + 'subida: ' + str(upldT) + ' mbs \n ping: ' + str(ping)
         #telegram#
-        self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
+        #self.resultmsj.config(text=f'Resultado de la prueba = {compDwn} h')
 
-        # Esperar un breve periodo antes de iniciar el hilo de imagenDone
-        self.root.after(1000, self.start_imagenDone)
+        # Establecer el evento para iniciar la imagenDone después de un breve periodo
+        self.root.after(1000, self.loading_event.set)
     
     def start_imagenDone(self):
         # Detener el hilo de imagenLoad y comenzar el hilo de imagenDone
@@ -114,68 +114,13 @@ class velociraptor:
         self.test_thread.start()
 
     def imagenLoad(self):
-        # Ruta al archivo GIF
-        gif_path = "load.gif"
-
-        # Carga el GIF como una secuencia de imágenes
-        gif_frames = imageio.get_reader(gif_path)
-
-        # Obtiene el tamaño del Canvas
-        canvas_width = self.gif_canvas.winfo_reqwidth()
-        canvas_height = self.gif_canvas.winfo_reqheight()
-
-        # Recorre todas las imágenes y las muestra en el Canvas
-        for i, frame in enumerate(gif_frames):
-            # Convierte el array de píxeles a una imagen de PIL
-            image = Image.fromarray(frame)
-            image = image.resize((150, 150))  # Ajusta el tamaño según tus necesidades
-
-            # Convierte la imagen a un formato compatible con Tkinter
-            tk_image = ImageTk.PhotoImage(image)
-
-            # Configura la imagen en el Canvas
-            canvas_x = (canvas_width - tk_image.width()) // 2  # Centra horizontalmente
-            canvas_y = (canvas_height - tk_image.height()) // 2  # Centra verticalmente
-            self.gif_canvas.create_image(canvas_x, canvas_y, anchor=tk.NW, image=tk_image)
-            self.gif_canvas.image = tk_image
-
-            # Actualiza la interfaz gráfica para mostrar el siguiente frame
-            self.root.update_idletasks()
-
-            # Espera un breve periodo para lograr la animación
-            self.root.after(100)  
+       self.resultmsj.config(text=f'Realizando prueba')
+       print("lading...")
+       self.loading_event.wait()
         
     def imagenDone(self):
-        # Ruta al archivo GIF
-        gif_path = "done.gif"
-
-        # Carga el GIF como una secuencia de imágenes
-        gif_frames = imageio.get_reader(gif_path)
-
-        # Obtiene el tamaño del Canvas
-        canvas_width = self.gif_canvas.winfo_reqwidth()
-        canvas_height = self.gif_canvas.winfo_reqheight()
-
-        # Recorre todas las imágenes y las muestra en el Canvas
-        for i, frame in enumerate(gif_frames):
-            # Convierte el array de píxeles a una imagen de PIL
-            image = Image.fromarray(frame)
-            image = image.resize((150, 150))  # Ajusta el tamaño según tus necesidades
-
-            # Convierte la imagen a un formato compatible con Tkinter
-            tk_image = ImageTk.PhotoImage(image)
-
-            # Configura la imagen en el Canvas
-            canvas_x = (canvas_width - tk_image.width()) // 2  # Centra horizontalmente
-            canvas_y = (canvas_height - tk_image.height()) // 2  # Centra verticalmente
-            self.gif_canvas.create_image(canvas_x, canvas_y, anchor=tk.NW, image=tk_image)
-            self.gif_canvas.image = tk_image
-
-            # Actualiza la interfaz gráfica para mostrar el siguiente frame
-            self.root.update_idletasks()
-
-            # Espera un breve periodo para lograr la animación
-            self.root.after(100)  
+        self.resultmsj.config(text=f'Resultado de la prueba = {self.compDwn}')
+        print('listo!')
 
     def create_widgets(self):
         self.create_labels_and_entries()
