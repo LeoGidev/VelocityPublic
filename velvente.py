@@ -40,16 +40,16 @@ class velociraptor:
         self.casilla.grid(row=3, column=1, sticky='ew', padx=0, pady=3, columnspan=2) 
         #Frames de resultado
         self.msj = ttk.Frame(self.casilla, style='barratop.TFrame')
-        self.msj = ttk.LabelFrame(self.root, text='Mensajes:', padding=(10, 10))
+        self.msj = ttk.LabelFrame(self.casilla, text='Mensajes:', padding=(10, 10))
         self.msj.grid(row=0, column=0, sticky='ew', padx=0, pady=3) 
 
         self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
-        self.bajada = ttk.LabelFrame(self.root, text='Bajada:', padding=(10, 10))
-        self.bajada.grid(row=1, column=0, sticky='ew', padx=0, pady=3) 
+        self.bajada = ttk.LabelFrame(self.casilla, text='Bajada:', padding=(10, 10))
+        self.bajada.grid(row=0, column=1, sticky='ew', padx=0, pady=3) 
 
         self.bajada = ttk.Frame(self.casilla, style='barratop.TFrame')
-        self.bajada = ttk.LabelFrame(self.root, text='Subida:', padding=(10, 10))
-        self.bajada.grid(row=2, column=0, sticky='ew', padx=0, pady=3)      
+        self.bajada = ttk.LabelFrame(self.casilla, text='Subida:', padding=(10, 10))
+        self.bajada.grid(row=0, column=2, sticky='ew', padx=0, pady=3)      
 
         self.tk_logo_image = None
         self.tk_start_image = None
